@@ -13,10 +13,12 @@ public class MessagingServer {
 		try {
 		
 			this.welcomeSocket = new ServerSocket(port);
+			System.out.println("server startet med port:"+port);
 			
 		} catch (IOException ex) {
 			
 			System.out.println("Messaging server: " + ex.getMessage());
+			System.out.println("server kunne ikke koble til port");
 			ex.printStackTrace();
 		}
 	}

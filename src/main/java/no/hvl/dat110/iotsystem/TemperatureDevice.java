@@ -5,26 +5,34 @@ import no.hvl.dat110.common.TODO;
 
 public class TemperatureDevice {
 
-	private static final int COUNT = 10;
+    private static final int COUNT = 10;
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
 
-		// simulated / virtual temperature sensor
-		TemperatureSensor sn = new TemperatureSensor();
+        System.out.println("Temperature device starting ...");
 
-		// TODO - start
+        // Simulated temperature sensor
+        TemperatureSensor sensor = new TemperatureSensor();
 
-		// create a client object and use it to
+        // Create a client and connect to the broker
+        Client client = new Client("sensor", Common.BROKERHOST, Common.BROKERPORT);
+        client.connect();
 
-		// - connect to the broker - user "sensor" as the user name
-		// - publish the temperature(s)
-		// - disconnect from the broker
+        // Publish temperature readings COUNT times
+        for (int i = 0; i < COUNT; i++) {
+            int temp = sensor.read();
+            System.out.println("READING: " + temp);
+            client.publish(Common.TEMPTOPIC, Integer.toString(temp));
+            
+            try {
+                Thread.sleep(1000); // Simulate delay
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
-		// TODO - end
-
-		System.out.println("Temperature device stopping ... ");
-
-		throw new UnsupportedOperationException(TODO.method());
-
-	}
+        // Disconnect from broker
+        client.disconnect();
+        System.out.println("Temperature device stopping ...");
+    }
 }
